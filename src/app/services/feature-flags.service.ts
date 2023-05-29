@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FeatureConfig } from '../interfaces/feature-flag';
 
@@ -8,8 +7,6 @@ import { FeatureConfig } from '../interfaces/feature-flag';
 export class FeatureFlagsService {
   config: FeatureConfig | null = null;
   responseConfig = {blog: true, feed: true, newsletter: true};
-
-  constructor(private http: HttpClient) {}
 
   loadConfig() {
     this.config = this.responseConfig;

@@ -1,18 +1,26 @@
-import { NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { AppRoutingModule } from './app.routing.module';
+import { FeatureFlagDirective } from './directives/feature-flag.directive';
+import { FeatureFlagsService } from './services/feature-flags.service';
+
+const featureFactory = (featureFlagsService: FeatureFlagsService) => () =>
+  featureFlagsService.loadConfig();
 
 @NgModule({
-  declarations: [
-    AppComponent
+  declarations: [AppComponent, FeatureFlagDirective],
+  imports: [BrowserModule, AppRoutingModule, HttpClientModule],
+  providers: [
+    {
+      provide: APP_INITIALIZER,
+      useFactory: featureFactory,
+      deps: [FeatureFlagsService],
+      multi: true,
+    },
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
